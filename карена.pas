@@ -1,35 +1,23 @@
 ﻿label esc;
-//const h: string='СУШФЬ ТХНЗ ПАУ УВМФИЩ БРСР ОИЕОФБЕУ КНХОАЧМУ';//пусть
-//const h: string='МАИ ЧЭВЖ ЬКОЯЕМОХЬН ЫПРПХ ЭФПОЧ ФОФ СУЫФОХШ РШОЙ ЛХУЬЭУХТ';//всю ночь
-//const h: string='ЗЯМ АУЕК АЕСЯНЗНЩДД ЮУФКШ ЭЭКНЬ ЭЕЧ ХЧХЧОЮУ ПЭЦА ОЩЧЦАУЮН';//4//енот//всю ночь
-//const h: string='ЗЯМ АЙЭЙ ЬТЯХИРТЖЦМ ЯЧЭКШ ЭЭАЕЫ ШТЕ МТЯЭЫРЬ РБЯА ОЩЧМЧТЩЫ';//5//еноты//всю ночь
-const h: string='ЗЯМ АЦВБ ЫОЦШЕЗНЩДЗ ЫКПУЮ ЦФКНЬ ЭИФ МТЯЭИХУ ПЭЦГ ЛРТАЕНХН';//6//енотик//всю ночь
-//const h: string='';
+var h: string='ЦХБПВ ЭДТЛЫТ Ш ЗЩЯПЭ ЮЩЯОЯ ЛРУЭ СОЬУМХМЮЬТЫ';//
+var len_start: integer=5;// начальная длина ключа 3
+var len_end: integer=5;// кончная длина ключа
 
-
-var l3k: integer=6;// начальная длина ключа 3
-var ek: integer=6;// кончная длина ключа
-var o: string;
-a: array[0..7] of string;
-
-
-
-var n:integer=0;
-s,d,e: string;//s2,
+o: string;
+a: array[0..7] of string;//алфавиты
+n:integer=0;// отработано вариантов
+s,d,e: string;// дешифрованные строки
 key: string;
-
 strip: array[0..2]of string;
 gap: string;///зазор
-
 ufo: integer=-1;// код ошибки
 aba: integer;// цикл алфавитов
-//e5: string; 
 gap5: string;//
 limit: integer;// сколько вариантов проверить
 key4,key5: string;//
 ak47: string;
-var lowerh: string;
-var h3s: string;
+lowerh: string;
+doubleh: string;// удвоенная h
 
 
 //******************************/
@@ -38,7 +26,7 @@ function kolt(x: string): string;// разбиение на слова
 var k: integer; r: string;
 begin
   k:=1;
-  r:=o;//var r: string =o;
+  r:=o;
   if aba in[4..7] then
   begin // слова разделялись подчеркиванием
     for var i:=1 to length(o) do
@@ -74,6 +62,7 @@ begin
 result:=r;
 end;
 
+
 function pot(x: char): integer;//конверсия прямого ключа обратный
 begin
   if pos(x,a[aba])=0 then 
@@ -84,7 +73,6 @@ begin
     end;
   result:=1+(length(a[aba])*2-pos(x,a[aba])+1)mod length(a[aba]);  
 end;  
-
 
 
 function dict(x: string): boolean;// наличие слов из словаря
@@ -2417,11 +2405,20 @@ end; //fb2
 
 function bido(x: string):boolean;// биграммы смерти
 begin
-  result:=Regex.IsMatch(x, '\bа[веёжцчщъыь]\b|\bб[^аениоту]\b|\bв[^авдеиоу]\b|'+
-    '\bг[^абеиоуэ]\b|\bд[^авгежикотуэю]\b|\bе[^джбзйлмнртуя]\b|\bж[^део]\b|\bз[^ау]'+
-    '\b|\bи[^авдежзийклмнорсфшэя]\b|\bк[^абвеиоуцшэю]\b|\bл[^агеилосуэя]\b'+
-    '\bм[^аеикопуыюя]\b');
-  if result then ufo:=669;
+  ufo:=0;
+  if Regex.IsMatch(x, '\bа[веёжцчщъыь ]\b') then ufo:=970;
+  if Regex.IsMatch(x, '\bб[^аениоту ]\b') then ufo:=970;
+  if Regex.IsMatch(x, '\bв[^авдеиоу ]\b') then ufo:=971;
+  if Regex.IsMatch(x, '\bг[^абеиоуэ]\b') then ufo:=972;
+  if Regex.IsMatch(x, '\bд[^авгежикотуэю]\b') then ufo:=973;
+  if Regex.IsMatch(x, '\bе[^джбзйлмнртуя]\b') then ufo:=974;
+  if Regex.IsMatch(x, '\bж[^део ]\b') then ufo:=975;
+  if Regex.IsMatch(x, '\bз[^ау]\b') then ufo:=976;
+  if Regex.IsMatch(x, '\bи[^авдежзийклмнорсфхшэя ]\b') then ufo:=977;
+  if Regex.IsMatch(x, '\bк[^абвеиоуцшэю ]\b') then ufo:=978;
+  if Regex.IsMatch(x, '\bл[^агеилосуэя]\b') then ufo:=979;
+  if Regex.IsMatch(x, '\bм[^аеикопуыюя]\b') then ufo:=980;
+  result:=ufo>0;
 end;   
 
 
@@ -2437,10 +2434,11 @@ end;
 
   
 begin// main
+  //readln(h);// юзер вводит шифростроку
   lowerh:=lowercase(h);// перевел исходную шифростроку в нижний регистр  
-  for var lk:=l3k to ek do // перебор длинн ключа
+  for var len:=len_start to len_end do // перебор длинн ключа
     begin
-  {рафинирование шифротекста. остасляю только русс буквы}
+  {рафинирование шифротекста. оставляю только русс буквы}
       o:=lowerh;
 ///************************************
     {автоматизация подбора алфавита. от присутствия символов делется вывод.}
@@ -2457,7 +2455,7 @@ begin// main
       var withspaceh:='';   
       for var i:=1 to length(o) do
         if pos(o[i],a[4])>0 then withspaceh:=withspaceh+o[i];      
-      var h2x:=withspaceh+withspaceh;
+      doubleh:=withspaceh+withspaceh;// удвоенная шифрострока
       
 for aba:=0 to 7 do // перебор алфавитов
 begin
@@ -2468,25 +2466,29 @@ begin
   if (aba=1)and((pos('ё',o)>0)or(pos('_',o)>0)) then continue;  
   if (aba=2)and((pos('ъ',o)>0)or(pos('_',o)>0)) then continue;  
   if (aba=3)and((pos('ё',o)>0)or(pos('ъ',o)>0)or(pos('_',o)>0)) then continue;  
-  //if (aba=1)and(pos('ё',o)>0) then continue;
   if (aba=5)and((pos('ё',o)>0)) then continue;  
   if (aba=6)and((pos('ъ',o)>0)) then continue;  
   if (aba=7)and((pos('ё',o)>0)or(pos('ъ',o)>0)) then continue;  
   if (aba in [4..7])and(pos(' ',o)>0)then continue;
-  writeln(aba,' пошел **************************(',aba,')   ',a[aba]);
+  writeln('**************************(',aba,')   ',a[aba]);
   // в алфавите должны быть все бувы шифровки. иначе алфавит не совместим с шифровкой.
   for var i:=1 to length(withspaceh) do
     if pos(withspaceh[i],a[aba])=0 then continue;
   //
   if (aba in [4..7])and(length(o)<>length(h)) then 
     continue;
+  if len*3>length(withspaceh) then 
+    begin
+      writeln('too long key'); 
+      halt(0);
+    end;  
   strip[0]:=copy(withspaceh,1,3);// обломки слов
-  strip[1]:=copy(withspaceh,1+lk,3);  
-  strip[2]:=copy(withspaceh,1+2*lk,3);  
-  gap:='';for var i:=1 to lk-3 do gap:=gap+'_';//
-  gap5:='';for var i:=1 to lk-3 do gap5:=gap5+'@';// чтобы регулярки не спотыкались о края слов
+  strip[1]:=copy(withspaceh,1+len,3);  
+  strip[2]:=copy(withspaceh,1+2*len,3);  
+  gap:=''; for var i:=1 to len-3 do gap:=gap+'_';//
+  gap5:=''; for var i:=1 to len-3 do gap5:=gap5+'@';// чтобы регулярки не спотыкались о края слов
 // стартовое значние ключа
-  var cv:='ааа';//'ено';//'сир';//'МИФ';//'ЖАЖ';//'ФАЙ';//'ЁБА';//'ФАК';//'СИР';//
+  var cv:='ааа';//'кры';//'ено';//'сир';//'МИФ';//'ЖАЖ';//'ФАЙ';//'ЁБА';//'ФАК';//'СИР';//
   if cv='ааа' then limit:=0 else limit:=1; 
   n:=0;
   for var i:=pot(cv[1]) to length(a[aba]) do
@@ -2503,6 +2505,7 @@ begin
         a[aba][1+(length(a[aba])*2-j+1)mod length(a[aba])]+
         a[aba][1+(length(a[aba])*2-k+1)mod length(a[aba])];  
       if pos('_',key)>0 then continue;//нельзя в ключах подчеркивание
+
   //********************************/
       s:=//зям___быо___знщ
         a[aba][1+(pos(strip[0][1],a[aba])-2+i)mod length(a[aba])]+
@@ -2516,23 +2519,23 @@ begin
         a[aba][1+(pos(strip[2][1],a[aba])-2+i)mod length(a[aba])]+
         a[aba][1+(pos(strip[2][2],a[aba])-2+j)mod length(a[aba])]+
         a[aba][1+(pos(strip[2][3],a[aba])-2+k)mod length(a[aba])]; 
-      //e:=s;// деши
+
       // лимитированый вывод если просто проверить определенный ключ
      //if limit>0 then writeln(uppercase(key),e5:25); // СИР          мра___ряс___зао   
       if fb1(s) then continue;    
       d:='';e:='';
-      h3s:=withspaceh+withspaceh; // удвоеная исходная шифрострока 
-      for var w:=1 to 1+(length(withspaceh)div lk) do //    
+      doubleh:=withspaceh+withspaceh; // удвоеная исходная шифрострока 
+      for var w:=1 to 1+(length(withspaceh)div len) do //    
         begin
           d:=d
-            +a[aba][1+(pos(h3s[1+(w-1)*lk+0],a[aba])-2+i)mod length(a[aba])]
-            +a[aba][1+(pos(h3s[1+(w-1)*lk+1],a[aba])-2+j)mod length(a[aba])]
-            +a[aba][1+(pos(h3s[1+(w-1)*lk+2],a[aba])-2+k)mod length(a[aba])]
+            +a[aba][1+(pos(doubleh[1+(w-1)*len+0],a[aba])-2+i)mod length(a[aba])]
+            +a[aba][1+(pos(doubleh[1+(w-1)*len+1],a[aba])-2+j)mod length(a[aba])]
+            +a[aba][1+(pos(doubleh[1+(w-1)*len+2],a[aba])-2+k)mod length(a[aba])]
             +gap;  
           e:=e
-            +a[aba][1+(pos(h3s[1+(w-1)*lk+0],a[aba])-2+i)mod length(a[aba])]
-            +a[aba][1+(pos(h3s[1+(w-1)*lk+1],a[aba])-2+j)mod length(a[aba])]
-            +a[aba][1+(pos(h3s[1+(w-1)*lk+2],a[aba])-2+k)mod length(a[aba])]
+            +a[aba][1+(pos(doubleh[1+(w-1)*len+0],a[aba])-2+i)mod length(a[aba])]
+            +a[aba][1+(pos(doubleh[1+(w-1)*len+1],a[aba])-2+j)mod length(a[aba])]
+            +a[aba][1+(pos(doubleh[1+(w-1)*len+2],a[aba])-2+k)mod length(a[aba])]
             +gap5;      
         end;  
       d:=copy(d,1,length(withspaceh));//
@@ -2541,57 +2544,57 @@ begin
       ak47:=kolt(e);// бить на слова
       if badword(ak47) then continue;// одиночные п, начальные ъ   
    //**********************************************************************/ 
-   if lk>3 then 
+   if len>3 then 
      for var fourth:=1 to length(a[aba]) do  
        begin 
        d:=''; e:='';
-      for var w:=1 to 1+(length(h)div lk) do 
+      for var w:=1 to 1+(length(h)div len) do 
       begin
         d:=d
-          +a[aba][1+(pos((h3s)[1+(w-1)*lk+0],a[aba])-2+i)mod length(a[aba])]
-          +a[aba][1+(pos((h3s)[1+(w-1)*lk+1],a[aba])-2+j)mod length(a[aba])]
-          +a[aba][1+(pos((h3s)[1+(w-1)*lk+2],a[aba])-2+k)mod length(a[aba])]
-          +a[aba][1+(pos((h3s)[1+(w-1)*lk+3],a[aba])-2+fourth)mod length(a[aba])]      
+          +a[aba][1+(pos((doubleh)[1+(w-1)*len+0],a[aba])-2+i)mod length(a[aba])]
+          +a[aba][1+(pos((doubleh)[1+(w-1)*len+1],a[aba])-2+j)mod length(a[aba])]
+          +a[aba][1+(pos((doubleh)[1+(w-1)*len+2],a[aba])-2+k)mod length(a[aba])]
+          +a[aba][1+(pos((doubleh)[1+(w-1)*len+3],a[aba])-2+fourth)mod length(a[aba])]      
           +copy(gap,1,length(gap)-1);  
         e:=e
-          +a[aba][1+(pos((h3s)[1+(w-1)*lk+0],a[aba])-2+i)mod length(a[aba])]
-          +a[aba][1+(pos((h3s)[1+(w-1)*lk+1],a[aba])-2+j)mod length(a[aba])]
-          +a[aba][1+(pos((h3s)[1+(w-1)*lk+2],a[aba])-2+k)mod length(a[aba])]
-          +a[aba][1+(pos((h3s)[1+(w-1)*lk+3],a[aba])-2+fourth)mod length(a[aba])]      
+          +a[aba][1+(pos((doubleh)[1+(w-1)*len+0],a[aba])-2+i)mod length(a[aba])]
+          +a[aba][1+(pos((doubleh)[1+(w-1)*len+1],a[aba])-2+j)mod length(a[aba])]
+          +a[aba][1+(pos((doubleh)[1+(w-1)*len+2],a[aba])-2+k)mod length(a[aba])]
+          +a[aba][1+(pos((doubleh)[1+(w-1)*len+3],a[aba])-2+fourth)mod length(a[aba])]      
           +copy(gap5,1,length(gap5)-1);         
       end; 
       d:=copy(d,1,length(withspaceh));// деши
-      //if(d[1]<>'н')then continue;// если известна первая буква ключа можно не церемониться
-      //if(d[4]<>'в')then continue;// если известна четвертая буква ключа можно не церемониться   
+      //if(d[1]<>'н')then continue;// если известна первая буква открытого можно не церемониться
+      //if(d[4]<>'д')then continue;// если известна четвертая буква открытого можно не церемониться   
       e:=copy(e,1,length(h)); 
         if fb1(d) then continue;
         if fb2(d) then continue;
         if badword(d) then continue; // одиночные п, начальные ъ
     //**********************************************************************/     
-        if lk>4 then// ключ длиннее четырех
+        if len>4 then// ключ длиннее четырех
           begin
             for var fifth:=1 to length(a[aba]) do //подбор пятой буквы
               begin
                 d:=''; e:='';        
-                for var w:=1 to 1+(length(withspaceh)div lk) do // расшифровка            
+                for var w:=1 to 1+(length(withspaceh)div len) do // расшифровка            
                   begin
                     d:=d
-                      +a[aba][1+(pos((h2x)[1+(w-1)*lk+0],a[aba])-2+i)mod length(a[aba])]
-                      +a[aba][1+(pos((h2x)[1+(w-1)*lk+1],a[aba])-2+j)mod length(a[aba])]
-                      +a[aba][1+(pos((h2x)[1+(w-1)*lk+2],a[aba])-2+k)mod length(a[aba])]
-                      +a[aba][1+(pos((h2x)[1+(w-1)*lk+3],a[aba])-2+fourth)mod length(a[aba])]   
-                      +a[aba][1+(pos((h2x)[1+(w-1)*lk+4],a[aba])-2+fifth)mod length(a[aba])]        
+                      +a[aba][1+(pos((doubleh)[1+(w-1)*len+0],a[aba])-2+i)mod length(a[aba])]
+                      +a[aba][1+(pos((doubleh)[1+(w-1)*len+1],a[aba])-2+j)mod length(a[aba])]
+                      +a[aba][1+(pos((doubleh)[1+(w-1)*len+2],a[aba])-2+k)mod length(a[aba])]
+                      +a[aba][1+(pos((doubleh)[1+(w-1)*len+3],a[aba])-2+fourth)mod length(a[aba])]   
+                      +a[aba][1+(pos((doubleh)[1+(w-1)*len+4],a[aba])-2+fifth)mod length(a[aba])]        
                       +copy(gap,1,length(gap)-2);  
                     e:=e
-                      +a[aba][1+(pos((h2x)[1+(w-1)*lk+0],a[aba])-2+i)mod length(a[aba])]
-                      +a[aba][1+(pos((h2x)[1+(w-1)*lk+1],a[aba])-2+j)mod length(a[aba])]
-                      +a[aba][1+(pos((h2x)[1+(w-1)*lk+2],a[aba])-2+k)mod length(a[aba])]
-                      +a[aba][1+(pos((h2x)[1+(w-1)*lk+3],a[aba])-2+fourth)mod length(a[aba])]   
-                      +a[aba][1+(pos((h2x)[1+(w-1)*lk+4],a[aba])-2+fifth)mod length(a[aba])]       
+                      +a[aba][1+(pos((doubleh)[1+(w-1)*len+0],a[aba])-2+i)mod length(a[aba])]
+                      +a[aba][1+(pos((doubleh)[1+(w-1)*len+1],a[aba])-2+j)mod length(a[aba])]
+                      +a[aba][1+(pos((doubleh)[1+(w-1)*len+2],a[aba])-2+k)mod length(a[aba])]
+                      +a[aba][1+(pos((doubleh)[1+(w-1)*len+3],a[aba])-2+fourth)mod length(a[aba])]   
+                      +a[aba][1+(pos((doubleh)[1+(w-1)*len+4],a[aba])-2+fifth)mod length(a[aba])]       
                       +copy(gap5,1,length(gap5)-2);        
                   end;           
                 d:=copy(d,1,length(withspaceh)); // обрезка под длину строки
-                //if(d[5]<>'и')then continue; 
+                //if(d[5]<>'у')then continue; // известная буква открытого текста
                 e:=copy(e,1,length(withspaceh)); // расшифровка
                 if fb1(d) then continue;
                 if fb2(d) then continue;             
@@ -2616,7 +2619,7 @@ begin
               writeln(key4,'    ',ak47); 
             end;
           end//k2
-          else// lk>3
+          else// len>3
           begin
             ak47:=kolt(e);
             if badword(ak47) then continue;  // одиночные п, начальные ъ   
@@ -2624,11 +2627,10 @@ begin
             if dict(ak47) then continue;// проверка по словарю
             writeln(key,gap,'    ',ak47);      // найденно       
           end;      
-        //ufo:=0;  // код ошибки
       end;// k
   esc:  
     end;//aba  
-  end;//lk перебор длин ключя
+  end;//len перебор длин ключя
   writeln('the end');
 end.
 
