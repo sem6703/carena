@@ -1,5 +1,6 @@
 ﻿label esc;
 var h: string='ЦХБПВ ЭДТЛЫТ Ш ЗЩЯПЭ ЮЩЯОЯ ЛРУЭ СОЬУМХМЮЬТЫ';//
+//var h: string='ЦХБПВ ЭДТЛЫТ Ш ЗЩЯПЭ ЮЩЯОЯ ЛРУЭ СОЬУМХМЮЬТЫ';//
 var len_start: integer=5;// начальная длина ключа 3
 var len_end: integer=5;// кончная длина ключа
 
@@ -2434,6 +2435,7 @@ end;
 
   
 begin// main
+if len_end<len_start then len_end:=len_start;// хотя бы
   //readln(h);// юзер вводит шифростроку
   lowerh:=lowercase(h);// перевел исходную шифростроку в нижний регистр  
   for var len:=len_start to len_end do // перебор длинн ключа
